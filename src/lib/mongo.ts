@@ -1,65 +1,66 @@
 import {MongoClient, MongoClientOptions} from 'mongodb';
 import {EventModel} from '../models/event.model';
+import config from 'config';
 
 export default class Mongo {
 
-  private static client;
+  private static readonly host: string = config.get('mongo.host');
+  private static readonly port: number = config.get('mongo.port');
+  private static readonly user: string; // config.get('mongo.user');
+  private static readonly password: string; // config.get('mongo.password');
+  private static readonly options: MongoClientOptions = config.get('mongo.clientOptions');
+  private static client: MongoClient;
   private static models;
 
   /**
    * Connects to a Mongo DB
-   * @param {String} host — Mongo host
-   * @param {number} port — Mongo port
-   * @param {String} user — Mongo user
-   * @param {String} password — Mongo password
-   * @param {MongoClientOptions} options — Mongo options
    */
-  public static async connect(
-    host: string,
-    port: number,
-    user?: string,
-    password?: string,
-    options?: MongoClientOptions,
-  ) {
-    MongoClient.connect(this.url(host, port, user, password), options)
-      .then((client) => {
-        console.log(`Mongo connected on: ${ host }:${ port }`);
-        this.client = client;
-        // TODO: Models manager
-        this.models = { event: new EventModel(client) };
-      })
-      .catch((err) => {
-        console.log('error', err);
-      });
-  }
+  public static async connect(): Promise<MongoClient> {
 
-  /**
-   *
-   */
-  public static close() {
-    if (this.client) {
-      this.client.close();
-    }
+    return new Promise((resolve, reject) => {
+      MongoClient.connect(this.url(), this.options)
+        .then((client) => {
+
+          // tslint:disable-next-line:no-console
+          console.log(`Mongo connected on: ${ this.host }:${ this.port }`);
+
+          this.client = client;
+          this.models = { event: new EventModel(client) };
+
+          resolve(client);
+        })
+        .catch((err) => reject(err));
+    });
   }
 
   /**
    * Prepares the URL string
-   * @param {String} host — Mongo host
-   * @param {number} port — Mongo port
-   * @param {String} user — Mongo user
-   * @param {String} password — Mongo password
    */
-  private static url(host, port, user, password): string {
+  private static url(): string {
 
     let url = 'mongodb://';
 
-    if (user)
-      url += `${user}:${password}@`;
+    if (this.user)
+      url += `${this.user}:${this.password}@`;
 
-    return url + `${host}:${port}`;
+    return url + `${this.host}:${this.port}`;
   }
 
+  /**
+   * Returns the loaded models
+   */
   public static get model() {
     return this.models;
+  }
+
+  /**
+   * Closes the Mongo DB connection
+   */
+  public static close(): void {
+    // tslint:disable-next-line:no-console
+    console.log('Mongo closed');
+    if (this.client) {
+      this.client.close();
+    }
   }
 }
