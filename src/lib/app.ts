@@ -1,12 +1,16 @@
 import config from 'config';
 import * as http from 'http';
 import express from 'express';
+import expressWs from 'express-ws';
 import compression from 'compression';
 import router from '../controllers/router';
 
+import {NotificationBroadcasterService} from '../services/notificationBroadcaster.service';
+
 export default class Server {
 
-  private static readonly app = express();
+  // private static readonly app = express();
+  private static readonly test = expressWs(express());
   private static server;
 
   /**
@@ -14,12 +18,26 @@ export default class Server {
    */
   public static async start(): Promise<http.Server> {
 
-    this.app.use(compression(config.get('compression')));
-    this.app.use(express.json(config.get('express.json')));
-    this.app.use(router);
+    this.test.app.use(compression(config.get('compression')));
+    this.test.app.use(express.json(config.get('express.json')));
+    this.test.app.use(router);
+
+    const mu = NotificationBroadcasterService.listen();
+
+    this.test.app.ws('/test', (ws, req) => {
+
+      ws.send('connected');
+
+      mu.on('message', (msg) => {
+        // @ts-ignore
+        this.test.getWss('/test').clients.forEach((client) => {
+          client.send(msg);
+        });
+      });
+    });
 
     return new Promise((resolve, reject) => {
-      this.server = this.app.listen(config.get('node.port'), config.get('node.host'), (err) => {
+      this.server = this.test.app.listen(config.get('node.port'), config.get('node.host'), (err) => {
         if (err) {
           return reject(err);
         }
@@ -28,7 +46,7 @@ export default class Server {
         console.log('Server listening on: %s:%s (%s)',
           config.get('node.host'),
           config.get('node.port'),
-          this.app.get('env'),
+          this.test.app.get('env'),
         );
 
         resolve(this.server);

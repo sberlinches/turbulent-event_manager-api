@@ -11,7 +11,8 @@
   "services": {
     "notificationBroadcaster": {
       "host": "NOTIFICATION_BROADCASTER_HOST",
-      "port": "NOTIFICATION_BROADCASTER_PORT"
+      "port": "NOTIFICATION_BROADCASTER_PORT",
+      "secure": "NOTIFICATION_BROADCASTER_SECURE"
     }
   }
 }
