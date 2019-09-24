@@ -57,9 +57,9 @@ export default class Mongo {
    * Closes the Mongo DB connection
    */
   public static close(): void {
-    // tslint:disable-next-line:no-console
-    console.log('Mongo closed');
     if (this.client) {
+      // tslint:disable-next-line:no-console
+      console.log('Mongo closed');
       this.client.close();
     }
   }
