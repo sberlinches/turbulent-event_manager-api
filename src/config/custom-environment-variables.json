@@ -1,0 +1,19 @@
+{
+  "mongo": {
+    "host": "MONGO_HOST",
+    "password": "MONGO_PASSWORD",
+    "port": "MONGO_PORT",
+    "user": "MONGO_USER"
+  },
+  "node": {
+    "env": "NODE_ENV",
+    "host": "NODE_HOST",
+    "port": "NODE_PORT"
+  },
+  "services": {
+    "notificationBroadcaster": {
+      "host": "NOTIFICATION_BROADCASTER_HOST",
+      "port": "NOTIFICATION_BROADCASTER_PORT"
+    }
+  }
+}

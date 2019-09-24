@@ -1,0 +1,41 @@
+{
+  "compression": {},
+  "express": {
+    "json": {
+      "inflate": true,
+      "limit": "100kb",
+      "reviver": null,
+      "strict": true,
+      "type": "application/json",
+      "verify": null
+    },
+    "router": {
+      "caseSensitive": false,
+      "mergeParams": false,
+      "strict": false
+    }
+  },
+  "joi": {
+    "abortEarly": true,
+    "convert": true,
+    "allowUnknown": false,
+    "skipFunctions": false,
+    "stripUnknown": false,
+    "language": {},
+    "presence": "optional",
+    "noDefaults": false,
+    "escapeHtml": false
+  },
+  "model": {
+    "event": {
+      "db": "turbulent",
+      "collection": "event"
+    }
+  },
+  "mongo": {
+    "clientOptions": {
+      "useNewUrlParser": true,
+      "useUnifiedTopology": true
+    }
+  }
+}
