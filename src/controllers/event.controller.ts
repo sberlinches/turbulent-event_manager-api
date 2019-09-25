@@ -4,7 +4,8 @@ import Mongo from '../lib/mongo';
 import {Controller} from '../lib/controller';
 import {NotificationBroadcasterService} from '../services/notificationBroadcaster.service';
 
-const eventUpdate = NotificationBroadcasterService.eventUpdate();
+// TODO: this should be instantiated on server start
+const scheduledEvents = new NotificationBroadcasterService('events.subscribeScheduledEvents');
 
 export class EventController extends Controller {
 
@@ -51,12 +52,6 @@ export class EventController extends Controller {
    * @param {ws.Server} wss — WebSocket server
    */
   public static subscribeScheduledEvents = (wss: ws.Server): void => {
-
-    eventUpdate.on('message', (msg) => {
-      console.log('%o: %s clients: Broadcasting: %s', new Date(), wss.clients.size, msg);
-      wss.clients.forEach((client) => {
-        client.send(msg);
-      });
-    });
+    scheduledEvents.subscribe(wss.clients);
   }
 }

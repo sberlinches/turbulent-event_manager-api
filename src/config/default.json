@@ -40,7 +40,7 @@
   },
   "services": {
     "notificationBroadcaster": {
-      "eventUpdate": {
+      "scheduledEvents": {
         "path": "events.subscribeScheduledEvents"
       }
     }

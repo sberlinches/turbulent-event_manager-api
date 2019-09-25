@@ -5,7 +5,7 @@ export class LiveService {
 
   private readonly host: string;
   private readonly port: number;
-  private readonly path: string;
+  private readonly method: string;
   private readonly secure: boolean;
   private readonly protocol: string;
   private liveService: WebSocket;
@@ -13,13 +13,13 @@ export class LiveService {
   /**
    * @param {String} host — The service host
    * @param {Number} port — The service port
-   * @param {String} path — The endpoint service path
+   * @param {String} method — The service endpoint
    * @param {Boolean} secure — Whether the service is secured or not
    */
-  constructor(host: string, port: number, path: string, secure: boolean = false) {
+  constructor(host: string, port: number, method: string, secure: boolean = false) {
     this.host = host;
     this.port = port;
-    this.path = path;
+    this.method = method;
     this.secure = secure;
     this.protocol = (this.secure) ? 'wss' : 'ws';
   }
@@ -29,7 +29,7 @@ export class LiveService {
    * @return {String} URL — The URL string
    */
   private get url(): string {
-    return `${this.protocol}://${this.host}:${this.port}/${this.path}`;
+    return `${this.protocol}://${this.host}:${this.port}/${this.method}`;
   }
 
   /**
