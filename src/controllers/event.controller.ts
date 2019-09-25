@@ -1,6 +1,10 @@
 import {Request, Response, NextFunction} from 'express';
-import {Controller} from '../lib/controller';
+import * as ws from 'ws';
 import Mongo from '../lib/mongo';
+import {Controller} from '../lib/controller';
+import {NotificationBroadcasterService} from '../services/notificationBroadcaster.service';
+
+const eventUpdate = NotificationBroadcasterService.eventUpdate();
 
 export class EventController extends Controller {
 
@@ -10,17 +14,15 @@ export class EventController extends Controller {
    * @param {Response} res — HTTP response argument
    * @param {NextFunction} next — Callback argument to the middleware function
    */
-  public static findAll = (req: Request, res: Response, next: NextFunction ): void => {
+  public static findAll = (req: Request, res: Response, next: NextFunction): void => {
 
     Mongo.model.event.findAll()
       .then((events) => {
         return res
-          .status(200)
+          .status(200) // TODO: literals
           .json(events);
       })
-      .catch((err) => {
-        next(err);
-      });
+      .catch((err) => next(err)); // TODO: Catch errors
   }
 
   /**
@@ -29,21 +31,32 @@ export class EventController extends Controller {
    * @param {Response} res — HTTP response argument
    * @param {NextFunction} next — Callback argument to the middleware function
    */
-  public static insertOne = (req: Request, res: Response, next: NextFunction ): void => {
+  public static insertOne = (req: Request, res: Response, next: NextFunction): void => {
 
-    // validation
-    // parse
-    req.body.scheduledAt = new Date(req.body.scheduledAt); // TODO: validate date first...
+    // TODO: Body validation and parse
+    req.body.scheduledAt = new Date(req.body.scheduledAt);
 
     Mongo.model.event.insertOne(req.body)
       .then((result) => {
         return res
-          .status(200)
+          .status(200) // TODO: literals
           .json(result.ops[0]);
       })
-      .catch((err) => {
-        console.log(err);
-        next(err);
+      .catch((err) => next(err)); // TODO: Catch errors
+  }
+
+  /**
+   * Subscribe scheduled events
+   * The subscribed client will receive the next scheduled events
+   * @param {ws.Server} wss — WebSocket server
+   */
+  public static subscribeScheduledEvents = (wss: ws.Server): void => {
+
+    eventUpdate.on('message', (msg) => {
+      console.log('%o: %s clients: Broadcasting: %s', new Date(), wss.clients.size, msg);
+      wss.clients.forEach((client) => {
+        client.send(msg);
       });
+    });
   }
 }
