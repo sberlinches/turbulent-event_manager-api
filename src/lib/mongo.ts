@@ -20,15 +20,12 @@ export default class Mongo {
     return new Promise((resolve, reject) => {
       MongoClient.connect(this.url(), this.options)
         .then((client) => {
-
           // tslint:disable-next-line:no-console
           console.log(`Mongo connected on: ${ this.host }:${ this.port }`);
-
           this.client = client;
-          this.models = { event: new EventModel(client) };
-
-          resolve(client);
         })
+        .then(() => this.loadModels())
+        .then(() => resolve(this.client))
         .catch((err) => reject(err));
     });
   }
@@ -44,6 +41,20 @@ export default class Mongo {
       url += `${this.user}:${this.password}@`;
 
     return url + `${this.host}:${this.port}`;
+  }
+
+  /**
+   * Loads the models
+   */
+  private static async loadModels(): Promise<void[]> {
+
+    const event = new EventModel(this.client);
+
+    this.models = { event };
+
+    return Promise.all([
+      event.createCollection(),
+    ]);
   }
 
   /**

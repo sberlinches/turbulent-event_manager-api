@@ -41,21 +41,22 @@ export class EventModel extends Model {
         },
       },
     };
-
-    this.createCollection();
   }
 
   /**
-   *
+   * Creates the collection in the DB (if it doesn't exists)
    */
-  public createCollection() {
-    this.client
-      .db(this.dbName)
-      .createCollection(this.collectionName, this.collectionOptions)
-      .then((collection) => {
-        console.log('col created');
-        this.collection = collection;
-      });
+  public async createCollection(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.client
+        .db(this.dbName)
+        .createCollection(this.collectionName, this.collectionOptions)
+        .then((collection) => {
+          this.collection = collection;
+          resolve();
+        })
+        .catch((err) => reject(err));
+    });
   }
 
   /**
@@ -63,7 +64,8 @@ export class EventModel extends Model {
    * @return {Promise<Array<Event>>} — A list of events
    */
   public async findAll(): Promise<Array<Event>> {
-    return this.collection.find({})
+    return this.collection
+      .find({})
       .toArray();
   }
 
@@ -72,6 +74,7 @@ export class EventModel extends Model {
    * @param {Event} event — A valid event object
    */
   public async insertOne(event: Event): Promise<InsertOneWriteOpResult> {
-    return this.collection.insertOne(event);
+    return this.collection
+      .insertOne(event);
   }
 }
