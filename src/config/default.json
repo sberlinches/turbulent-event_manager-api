@@ -12,7 +12,7 @@
     "router": {
       "caseSensitive": false,
       "mergeParams": false,
-      "strict": false
+      "strict": true
     }
   },
   "joi": {
