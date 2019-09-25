@@ -13,7 +13,7 @@ export interface Event {
  */
 export class EventModel extends Model {
 
-  collection: Collection;
+  _collection: Collection;
   dbName: string;
   collectionName: string;
   collectionOptions: CollectionCreateOptions;
@@ -48,11 +48,11 @@ export class EventModel extends Model {
    */
   public async createCollection(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.client
+      this._client
         .db(this.dbName)
         .createCollection(this.collectionName, this.collectionOptions)
         .then((collection) => {
-          this.collection = collection;
+          this._collection = collection;
           resolve();
         })
         .catch((err) => reject(err));
@@ -60,11 +60,18 @@ export class EventModel extends Model {
   }
 
   /**
+   * Returns the collection
+   */
+  public get collection(): Collection {
+    return this._collection;
+  }
+
+  /**
    * Find all
    * @return {Promise<Array<Event>>} — A list of events
    */
   public async findAll(): Promise<Array<Event>> {
-    return this.collection
+    return this._collection
       .find({})
       .toArray();
   }
@@ -74,7 +81,7 @@ export class EventModel extends Model {
    * @param {Event} event — A valid event object
    */
   public async insertOne(event: Event): Promise<InsertOneWriteOpResult> {
-    return this.collection
+    return this._collection
       .insertOne(event);
   }
 }

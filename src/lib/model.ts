@@ -1,24 +1,16 @@
 import {CollectionCreateOptions, MongoClient, Collection} from 'mongodb';
 
-interface ModelInterface {
-  dbName: string;
-  collectionName: string;
-  collectionOptions: object;
-}
+export abstract class Model {
 
-export abstract class Model implements ModelInterface {
-
-  protected readonly client: MongoClient;
-  protected abstract collection: Collection;
+  protected readonly _client: MongoClient;
+  protected abstract _collection: Collection;
   public abstract dbName: string;
   public abstract collectionName: string;
   public abstract collectionOptions: CollectionCreateOptions;
 
   protected constructor(client: MongoClient) {
-    this.client = client;
+    this._client = client;
   }
 
-  public abstract findAll();
-  public abstract insertOne(object: object);
-  // etc...
+  public abstract get collection(): Collection;
 }
