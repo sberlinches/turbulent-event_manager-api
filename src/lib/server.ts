@@ -1,5 +1,5 @@
 import config from 'config';
-import * as http from 'http';
+import http from 'http';
 import express from 'express';
 import expressWs from 'express-ws';
 import compression from 'compression';
@@ -20,20 +20,24 @@ export default class Server {
   /**
    * Creates and starts a HTTP server
    */
-  public static async start(): Promise<http.Server> {
+  public static async start(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.server = expressWS.app.listen(this.port, this.host, (err) => {
 
-        if (err) return reject(err);
+      this.server = http.createServer(expressWS.app);
 
-        console.log('%o: Server listening on: %s:%s (%s)',
-          new Date(),
-          this.host,
-          this.port,
-          expressWS.app.get('env'),
-        );
+      const completeURL = `${this.host}:${this.port}`;
+      let msg;
 
-        resolve(this.server);
+      this.server.on('error', (e) => {
+        msg = `Server failed to run on: ${completeURL}`;
+        console.log('%o: %s', new Date(), msg);
+        reject();
+      });
+
+      this.server.listen(this.port, this.host, () => {
+        msg = `Server running on: ${completeURL}`;
+        console.log('%o: %s', new Date(), msg);
+        resolve();
       });
     });
   }

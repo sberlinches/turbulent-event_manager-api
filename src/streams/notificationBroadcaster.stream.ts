@@ -21,20 +21,13 @@ export class NotificationBroadcasterStream {
 
   /**
    * Connects to the instantiated streams
-   * @return // TODO
+   * @return {Promise<void[]>} — The promises with the message whether the connection was successful or not
    */
-  public connect() { // TODO: returns the errors only
+  public connect(): Promise<void[]> {
     return Promise.all([
       this.scheduledEvents.connect(config.get('services.notificationBroadcaster.scheduledEvents.endpoint')),
       // anotherStreams.connect()
-    ]).then(() => {
-      console.log('%o: Listening from: %s://%s:%s',
-        new Date(),
-        this._protocol,
-        this._host,
-        this._port,
-      );
-    });
+    ]);
   }
 
   /**

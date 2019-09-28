@@ -14,31 +14,30 @@ export default class Mongo {
 
   /**
    * Connects to a Mongo DB
+   * @return {Promise<void>}
    */
-  public static async connect(): Promise<MongoClient> {
+  public static async connect(): Promise<void> {
 
     return new Promise((resolve, reject) => {
-      MongoClient.connect(this.url(), this.options)
+      MongoClient.connect(this.url, this.options)
         .then((client) => {
-
-          console.log('%o: Mongo connected on: %s:%s',
-            new Date(),
-            this.host,
-            this.port,
-          );
-
+          console.log('%o: Mongo connected to: %s', new Date(), this.url);
           this.client = client;
         })
+        .catch((err) => {
+          console.log('%o: Mongo failed to connect to: %s', new Date(), this.url);
+          reject();
+        })
         .then(() => this.loadModels())
-        .then(() => resolve(this.client))
-        .catch((err) => reject(err));
+        .then(() => resolve())
+        .catch(() => reject());
     });
   }
 
   /**
    * Prepares the URL string
    */
-  private static url(): string {
+  private static get url(): string {
 
     let url = 'mongodb://';
 
@@ -57,9 +56,15 @@ export default class Mongo {
 
     this.models = { event };
 
-    return Promise.all([
-      event.createCollection(),
-    ]);
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        event.createCollection(),
+      ]).then(() => resolve())
+        .catch(() => {
+          console.log('%o: Mongo failed to create the collections', new Date());
+          reject();
+        });
+    });
   }
 
   /**

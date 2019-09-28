@@ -11,9 +11,9 @@ export class Streams {
 
   /**
    * Connects to the instantiated group of streams
-   * @return // TODO
+   * @return {Promise<void[][]>} — The promises with the message whether the connection was successful or not
    */
-  public static connect() { // TODO: return type
+  public static connect(): Promise<void[][]> { // TODO: return type
     return Promise.all([
       this.notificationBroadcaster.connect(),
       // anotherGroupOfStreams.connect()

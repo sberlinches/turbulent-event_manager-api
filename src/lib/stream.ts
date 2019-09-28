@@ -14,8 +14,8 @@ export class Stream {
   private _wss: WebSocket;
 
   /**
-   * @param {String} protocol — The socket server connection protocol
-   * @param {String} host — The socket server host
+   * @param {string} protocol — The socket server connection protocol
+   * @param {string} host — The socket server host
    * @param {Number} port — The socket server port
    */
   constructor(protocol: string, host: string, port: number) {
@@ -28,23 +28,38 @@ export class Stream {
 
   /**
    * Creates the connection to the socket server
-   * @param {String} endpoint — The socket server endpoint
-   * @return {Promise<WebSocket>} — A promise with the socket connection
+   * @param {string} endpoint — The socket server endpoint
+   * @return {Promise<void>} — A promise with the message whether the connection was successful or not
    */
-  public connect(endpoint: string): Promise<WebSocket> {
+  public connect(endpoint: string): Promise<void> {
+
+    const completeURL = `${this._url}/${endpoint}`;
+
     return new Promise((resolve, reject) => {
 
-      this._wss = new WebSocket(`${this._url}/${endpoint}`);
+      this._wss = new WebSocket(completeURL);
+      let msg;
 
       this._wss.on('error', (err) => {
-        reject(err);
+        msg = `Socket failed to connect: ${completeURL}`;
+        console.log('%o: %s', new Date(), msg);
+        reject();
       });
 
       this._wss.on('open', () => {
         this.route();
-        resolve(this._wss);
+        msg = `Socket listening to: ${completeURL}`;
+        console.log('%o: %s', new Date(), msg);
+        resolve();
       });
     });
+  }
+
+  /**
+   * @return {WebSocket} — The socket server connection
+   */
+  public get wss(): WebSocket {
+    return this._wss;
   }
 
   /**
@@ -52,7 +67,7 @@ export class Stream {
    */
   public disconnect(): void {
     if (this._wss) {
-      console.log('%o: Socket disconnected', new Date());
+      console.log('%o: Sockets disconnected', new Date());
       this._wss.terminate();
     }
   }
