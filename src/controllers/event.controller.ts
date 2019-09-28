@@ -2,10 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import * as ws from 'ws';
 import Mongo from '../lib/mongo';
 import {Controller} from '../lib/controller';
-import {NotificationBroadcasterService} from '../services/notificationBroadcaster.service';
-
-// TODO: this should be instantiated on server start
-const scheduledEvents = new NotificationBroadcasterService('events.subscribeScheduledEvents');
+import {Streams} from '../streams/streams';
 
 export class EventController extends Controller {
 
@@ -52,6 +49,8 @@ export class EventController extends Controller {
    * @param {ws.Server} wss — WebSocket server
    */
   public static subscribeScheduledEvents = (wss: ws.Server): void => {
-    scheduledEvents.subscribe(wss.clients);
+    wss.clients.forEach( (client) => {
+      Streams.notificationBroadcaster.scheduledEvents.subscribe(client);
+    });
   }
 }

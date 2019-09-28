@@ -10,9 +10,9 @@
   },
   "services": {
     "notificationBroadcaster": {
+      "protocol": "NOTIFICATION_BROADCASTER_PROTOCOL",
       "host": "NOTIFICATION_BROADCASTER_HOST",
-      "port": "NOTIFICATION_BROADCASTER_PORT",
-      "secure": "NOTIFICATION_BROADCASTER_SECURE"
+      "port": "NOTIFICATION_BROADCASTER_PORT"
     }
   }
 }

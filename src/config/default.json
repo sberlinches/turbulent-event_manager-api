@@ -41,7 +41,7 @@
   "services": {
     "notificationBroadcaster": {
       "scheduledEvents": {
-        "path": "events.subscribeScheduledEvents"
+        "endpoint": "events.subscribeScheduledEvents"
       }
     }
   }
