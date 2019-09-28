@@ -43,8 +43,7 @@ export default class Server {
    */
   public static close(): void {
     if (this.server) {
-      // tslint:disable-next-line:no-console
-      console.log('Server closed');
+      console.log('%o: Server closed', new Date());
       this.server.close();
     }
   }
