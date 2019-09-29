@@ -54,6 +54,7 @@ describe('/events', () => {
         request.post(HttpUri, options, () => {
           ws.on('message', (msg) => {
             expect(msg).toEqual('Hello world');
+            ws.close();
             done();
           });
         });
