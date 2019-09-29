@@ -78,6 +78,7 @@ export class Stream {
    * @param {WebSocket} client — A client socket connection
    */
   public subscribe(client: WebSocket): void {
+    // TODO: Remove the client (subscriber) when it closes or loses the connection
     this._subscribers.add(client);
   }
 
