@@ -27,7 +27,7 @@ class HttpServer {
   public static async start(): Promise<void> {
     return new Promise((resolve, reject) => {
 
-      const completeURL = `http>//${this.host}:${this.port}`;
+      const completeURL = `http://${this.host}:${this.port}`;
       let msg;
 
       this.server = app
