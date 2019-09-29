@@ -1,31 +1,17 @@
-import config from 'config';
-import Joi, { Schema, ValidationOptions } from '@hapi/joi';
-import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { HttpStatus, HttpCode } from 'lib/http.enum';
+import { validationResult } from 'express-validator';
 
-export class Validator {
+export const validate = (validations) => {
+  return async (req, res, next) => {
 
-  /**
-   * Validates the request body
-   * @param schema
-   * @param options
-   */
-  public static validateBody(schema: Schema, options: ValidationOptions = config.get('joi')): RequestHandler {
+    await Promise.all(validations.map(validation => validation.run(req)));
+    const errors = validationResult(req);
 
-    return (req: Request, res: Response, next: NextFunction) => {
+    if (!errors.isEmpty()) {
+      res
+        .status(422)
+        .json({ errors: errors.array() }); // TODO: Format
+    }
 
-      const result = Joi.validate(req.body, schema, options);
-
-      if (result.error) {
-        return res.status(HttpStatus.BAD_REQUEST)
-          .json({
-            code: HttpCode.MISSING_FIELD,
-            message: `${result.error.details[0].path[0]} required`,
-            field: result.error.details[0].path[0],
-          });
-      }
-
-      return next();
-    };
-  }
-}
+    return next();
+  };
+};
