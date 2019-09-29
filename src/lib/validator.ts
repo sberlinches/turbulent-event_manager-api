@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator';
+import {HttpStatus} from './http.enum';
 
 export const validate = (validations) => {
   return async (req, res, next) => {
@@ -7,9 +8,9 @@ export const validate = (validations) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res
-        .status(422)
-        .json({ errors: errors.array() }); // TODO: Format
+      return res
+        .status(HttpStatus.UNPROCESSABLE_ENTITY)
+        .json({ errors: errors.array() }); // TODO: Response format
     }
 
     return next();
