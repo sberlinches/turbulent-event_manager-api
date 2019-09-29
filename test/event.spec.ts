@@ -1,9 +1,12 @@
 import request from 'request';
+import WebSocket from 'ws';
+// TODO: Start server
 // TODO: Implement mocks
 
 describe('/events', () => {
 
-  const uri = 'http://localhost:3000/events';
+  const HttpUri = `http://127.0.0.1:3000/events`;
+  const WsUri = `ws://127.0.0.1:3000/events.subscribeScheduledEvents`;
   const options = {
     json: true,
     body: {},
@@ -17,7 +20,7 @@ describe('/events', () => {
         scheduledAt: new Date(),
       };
 
-      request.post(uri, options, (error, response, body) => {
+      request.post(HttpUri, options, (error, response, body) => {
         expect(response.statusCode).toEqual(200);
         done();
       });
@@ -26,7 +29,7 @@ describe('/events', () => {
 
       options.body = {};
 
-      request.post(uri, options, (error, response, body) => {
+      request.post(HttpUri, options, (error, response, body) => {
         expect(response.statusCode).toEqual(422);
         done();
       });
@@ -35,7 +38,26 @@ describe('/events', () => {
     it('Should be wrong date', (done) => done());
   });
 
-  describe('subscribeScheduledEvents', () => {
-    it('should be OK', (done) => {});
+  describe('.subscribeScheduledEvents', () => {
+    it('should be OK', (done) => {
+
+      const currentDateTime = new Date();
+      const scheduledAt = new Date(currentDateTime.getTime() + 1000);
+      const ws = new WebSocket(WsUri);
+
+      options.body = {
+        title: 'Hello world',
+        scheduledAt: scheduledAt,
+      };
+
+      ws.on('open', (err) => {
+        request.post(HttpUri, options, () => {
+          ws.on('message', (msg) => {
+            expect(msg).toEqual('Hello world');
+            done();
+          });
+        });
+      });
+    });
   });
 });
