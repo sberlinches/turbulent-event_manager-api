@@ -17,9 +17,15 @@ export class EventValidator {
     validate([
       body('title')
         .exists()
-        .isLength({ min: 2 }),
+        .isString()
+        .isLength({ min: 2 })
+        .trim(),
       body('scheduledAt')
-        .exists(),
+        .exists()
+        // Checks whether the string has a date format or not
+        // TODO: Move custom validation to separate file
+        .custom((date) => (!isNaN(Date.parse(date))))
+        .toDate(),
     ])(req, res, next);
   }
 }
