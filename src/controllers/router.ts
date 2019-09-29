@@ -10,9 +10,10 @@ router.get('/events', EventController.findAll);
 router.post('/events', EventValidator.insertOne, EventController.insertOne);
 
 // WS routes
-router.ws('/events.subscribeScheduledEvents', () => {
+router.ws('/events.subscribeScheduledEvents', (ws, req) => {
   EventController.subscribeScheduledEvents(
     // @ts-ignore
     expressWS.getWss('/events.subscribeScheduledEvents'),
+    req,
   );
 });

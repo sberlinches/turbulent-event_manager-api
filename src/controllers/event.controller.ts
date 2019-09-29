@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import {Server} from 'ws';
 import Mongo from '../lib/mongo';
 import {Streams} from '../streams/streams';
+import {HttpStatus} from '../lib/http.enum';
 
 /**
  * Event controller
@@ -19,10 +20,10 @@ export class EventController {
     Mongo.model.event.findAll()
       .then((events) => {
         return res
-          .status(200) // TODO: literals
+          .status(HttpStatus.OK)
           .json(events);
       })
-      .catch((err) => next(err)); // TODO: Catch errors
+      .catch(next);
   }
 
   /**
@@ -33,26 +34,26 @@ export class EventController {
    */
   public static insertOne = (req: Request, res: Response, next: NextFunction): void => {
 
-    // TODO: Body validation and parse
-    req.body.scheduledAt = new Date(req.body.scheduledAt);
-
     Mongo.model.event.insertOne(req.body)
       .then((result) => {
+        // TODO: logger module
         console.log('%o: New event scheduled at %o', new Date(), result.ops[0].scheduledAt);
         return res
-          .status(200) // TODO: literals
+          .status(HttpStatus.OK)
           .json(result.ops[0]);
       })
-      .catch((err) => next(err)); // TODO: Catch errors
+      .catch(next);
   }
 
   /**
    * Subscribe scheduled events
    * The subscribed client will receive the next scheduled events
    * @param {Server} wss — WebSocket server
+   * @param {Request} req — HTTP request argument
    */
-  public static subscribeScheduledEvents = (wss: Server): void => {
-    console.log('%o: %s client(s) listening to: /events.subscribeScheduledEvents', new Date(), wss.clients.size);
+  public static subscribeScheduledEvents = (wss: Server, req: Request) => {
+    // TODO: logger module
+    console.log('%o: %s client(s) listening to: %s', new Date(), wss.clients.size, req.originalUrl);
     wss.clients.forEach( (client) => {
       Streams.notificationBroadcaster.scheduledEvents.subscribe(client);
     });
