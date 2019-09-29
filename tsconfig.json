@@ -18,6 +18,8 @@
   ],
   "include": [
     "src/**/*",
-    "src/**/*.json"
+    "src/**/*.json",
+    "test/**/*",
+    "test/**/*.json"
   ]
 }

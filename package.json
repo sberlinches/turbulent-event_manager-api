@@ -8,9 +8,9 @@
     "build": "npm run clean && npm run build-ts",
     "build-ts": "tsc",
     "clean": "rm -rf dist/*",
-    "dev": "npm run build && node -r dotenv/config dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node -r dotenv/config dist/index.js"
+    "dev": "npm run build && NODE_CONFIG_DIR=dist/src/config node -r dotenv/config dist/src/index.js",
+    "test": "npm run build && NODE_CONFIG_DIR=dist/src/config JASMINE_CONFIG_PATH=test/support/jasmine.json node -r dotenv/config node_modules/jasmine/bin/jasmine",
+    "start": "NODE_CONFIG_DIR=dist/src/config node -r dotenv/config dist/src/index.js"
   },
   "repository": {
     "type": "git",
