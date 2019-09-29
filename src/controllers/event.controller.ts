@@ -36,6 +36,7 @@ export class EventController extends Controller {
 
     Mongo.model.event.insertOne(req.body)
       .then((result) => {
+        console.log('%o: New event scheduled at %o', new Date(), result.ops[0].scheduledAt);
         return res
           .status(200) // TODO: literals
           .json(result.ops[0]);
@@ -49,6 +50,7 @@ export class EventController extends Controller {
    * @param {ws.Server} wss — WebSocket server
    */
   public static subscribeScheduledEvents = (wss: ws.Server): void => {
+    console.log('%o: %s client(s) listening to: /events.subscribeScheduledEvents', new Date(), wss.clients.size);
     wss.clients.forEach( (client) => {
       Streams.notificationBroadcaster.scheduledEvents.subscribe(client);
     });
