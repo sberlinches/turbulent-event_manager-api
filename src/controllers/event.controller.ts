@@ -1,10 +1,12 @@
 import {Request, Response, NextFunction} from 'express';
-import * as ws from 'ws';
+import {Server} from 'ws';
 import Mongo from '../lib/mongo';
-import {Controller} from '../lib/controller';
 import {Streams} from '../streams/streams';
 
-export class EventController extends Controller {
+/**
+ * Event controller
+ */
+export class EventController {
 
   /**
    * Find all
@@ -47,9 +49,9 @@ export class EventController extends Controller {
   /**
    * Subscribe scheduled events
    * The subscribed client will receive the next scheduled events
-   * @param {ws.Server} wss — WebSocket server
+   * @param {Server} wss — WebSocket server
    */
-  public static subscribeScheduledEvents = (wss: ws.Server): void => {
+  public static subscribeScheduledEvents = (wss: Server): void => {
     console.log('%o: %s client(s) listening to: /events.subscribeScheduledEvents', new Date(), wss.clients.size);
     wss.clients.forEach( (client) => {
       Streams.notificationBroadcaster.scheduledEvents.subscribe(client);
