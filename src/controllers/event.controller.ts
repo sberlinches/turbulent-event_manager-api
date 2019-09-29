@@ -36,7 +36,6 @@ export class EventController {
 
     Mongo.model.event.insertOne(req.body)
       .then((result) => {
-        // TODO: logger module
         console.log('%o: New event scheduled at %o', new Date(), result.ops[0].scheduledAt);
         return res
           .status(HttpStatus.OK)
@@ -52,7 +51,7 @@ export class EventController {
    * @param {Request} req — HTTP request argument
    */
   public static subscribeScheduledEvents = (wss: Server, req: Request) => {
-    // TODO: logger module
+
     console.log('%o: %s client(s) listening to: %s', new Date(), wss.clients.size, req.originalUrl);
     wss.clients.forEach( (client) => {
       Streams.notificationBroadcaster.scheduledEvents.subscribe(client);
