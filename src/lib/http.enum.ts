@@ -1,34 +1,3 @@
-export const enum HttpCode {
-  NOT_FOUND = 'not_found',
-  CLIENT_INVALID_CREDENTIALS = 'client_invalid_credentials',
-  SPACE_NOT_FOUND = 'space_not_found',
-  USER_NOT_FOUND = 'user_not_found',
-  USER_INVALID_CREDENTIALS = 'user_invalid_credentials',
-  USER_IN_PS = 'user_in_ps',
-  USER_INVALID_EMAIL = 'user_invalid_email',
-  UNEXPECTED_ERROR = 'unexpected_error',
-  MISSING_FIELD = 'missing_field',
-}
-
-export const enum HttpMessage {
-  NOT_FOUND = 'Not Found',
-  CLIENT_INVALID_CREDENTIALS = 'Client invalid credentials',
-  SPACE_NOT_FOUND = 'Space not found',
-  USER_NOT_FOUND = 'User not found',
-  USER_INVALID_CREDENTIALS = 'User invalid credentials',
-  USER_IN_PS = 'User exists in ps',
-  USER_INVALID_EMAIL = 'User email format not valid',
-  UNEXPECTED_ERROR = 'Unexpected error',
-}
-
-export const enum HttpMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
-
 export const enum HttpStatus {
   CONTINUE = 100,
   SWITCHING_PROTOCOLS = 101,
