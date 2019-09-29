@@ -2,6 +2,12 @@ import {NextFunction, Request, Response} from 'express';
 import {body} from 'express-validator';
 import {validate} from '../lib/validator';
 
+// Checks whether the string has a date format or not
+// TODO: Move custom validation to separate file
+const isDate = (value): boolean => {
+  return (!isNaN(Date.parse(value)));
+};
+
 /**
  * Event validator
  */
@@ -22,9 +28,7 @@ export class EventValidator {
         .trim(),
       body('scheduledAt')
         .exists()
-        // Checks whether the string has a date format or not
-        // TODO: Move custom validation to separate file
-        .custom((date) => (!isNaN(Date.parse(date))))
+        .custom(isDate)
         .toDate(),
     ])(req, res, next);
   }
