@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {expressWS} from '../lib/httpServer';
+import {HttpStatus} from '../lib/http.enum';
 import {EventController} from './event.controller';
 import {EventValidator} from '../validators/event.validator';
 
@@ -17,3 +18,15 @@ router.ws('/events.subscribeScheduledEvents', (ws, req) => {
     req,
   );
 });
+
+// Non-defined routes
+router.use((req, res) => {
+
+  return res
+    .status(HttpStatus.NOT_FOUND)
+    .json({
+      error: `[${req.method}]${req.originalUrl} Not Found`,
+    });
+});
+
+// TODO: Non-handled responses
