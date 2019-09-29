@@ -1,12 +1,12 @@
 import Mongo from './lib/mongo';
-import Server from './lib/server';
+import {HttpServer} from './lib/httpServer';
 import {Streams} from './streams/streams';
 
-Server.start()
+HttpServer.start()
   .then(() => Mongo.connect())
   .then(() => Streams.connect())
   .catch(() => {
-    Server.close();
+    HttpServer.stop();
     Mongo.close();
     Streams.disconnect();
   });
