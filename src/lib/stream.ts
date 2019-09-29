@@ -86,7 +86,7 @@ export class Stream {
    */
   private route(): void {
     this._wss.on('message', (msg) => {
-      console.log('%o: %s clients: Broadcasting: %s', new Date(), this._subscribers.size, msg);
+      console.log('%o: %s client(s): Broadcasting: %s', new Date(), this._subscribers.size, msg);
       this._subscribers.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(msg);
