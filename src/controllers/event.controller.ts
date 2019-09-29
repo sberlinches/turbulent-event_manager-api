@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import {Server} from 'ws';
-import Mongo from '../lib/mongo';
+import {Mongo} from '../lib/mongo';
 import {Streams} from '../streams/streams';
 import {HttpStatus} from '../lib/http.enum';
 

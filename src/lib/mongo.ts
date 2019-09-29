@@ -2,7 +2,7 @@ import {MongoClient, MongoClientOptions} from 'mongodb';
 import {EventModel} from '../models/event.model';
 import config from 'config';
 
-export default class Mongo {
+export class Mongo {
 
   private static readonly host: string = config.get('mongo.host');
   private static readonly port: number = config.get('mongo.port');
