@@ -3,10 +3,9 @@
     "host": "MONGO_HOST",
     "port": "MONGO_PORT"
   },
-  "node": {
-    "env": "NODE_ENV",
-    "host": "NODE_HOST",
-    "port": "NODE_PORT"
+  "server": {
+    "host": "SERVER_HOST",
+    "port": "SERVER_PORT"
   },
   "services": {
     "notificationBroadcaster": {
