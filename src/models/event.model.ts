@@ -21,8 +21,8 @@ export class EventModel extends Model {
   constructor(client: MongoClient) {
     super(client);
 
-    this.dbName = config.get('model.event.db');
-    this.collectionName = config.get('model.event.collection');
+    this.dbName = config.get('mongo.dbName');
+    this.collectionName = config.get('mongo.collections.events.collectionName');
     this.collectionOptions = {
       validator: {
         $jsonSchema: {

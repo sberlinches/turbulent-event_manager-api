@@ -6,8 +6,8 @@ export class Mongo {
 
   private static readonly host: string = config.get('mongo.host');
   private static readonly port: number = config.get('mongo.port');
-  private static readonly user: string; // config.get('mongo.user');
-  private static readonly password: string; // config.get('mongo.password');
+  private static readonly user: string;
+  private static readonly password: string;
   private static readonly options: MongoClientOptions = config.get('mongo.clientOptions');
   private static client: MongoClient;
   private static models;

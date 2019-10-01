@@ -15,27 +15,20 @@
       "strict": true
     }
   },
-  "joi": {
-    "abortEarly": true,
-    "convert": true,
-    "allowUnknown": false,
-    "skipFunctions": false,
-    "stripUnknown": false,
-    "language": {},
-    "presence": "optional",
-    "noDefaults": false,
-    "escapeHtml": false
-  },
-  "model": {
-    "event": {
-      "db": "turbulent",
-      "collection": "event"
-    }
-  },
   "mongo": {
+    "host": "",
+    "port": "",
+    "user": "",
+    "password": "",
     "clientOptions": {
       "useNewUrlParser": true,
       "useUnifiedTopology": true
+    },
+    "dbName": "turbulent",
+    "collections": {
+      "events": {
+        "collectionName": "event"
+      }
     }
   },
   "services": {
