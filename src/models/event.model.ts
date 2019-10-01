@@ -1,7 +1,10 @@
 import config from 'config';
 import {Collection, CollectionCreateOptions, InsertOneWriteOpResult, MongoClient, ObjectID} from 'mongodb';
-import {Model} from '../lib/model';
+import {MongoCollection} from '../lib/mongoCollection';
 
+/**
+ * Event entity
+ */
 export interface Event {
   readonly _id?: ObjectID;
   title: string;
@@ -11,15 +14,15 @@ export interface Event {
 /**
  * Event model
  */
-export class EventModel extends Model {
+export class EventModel extends MongoCollection {
 
-  _collection: Collection;
+  _collection: Collection<Event>;
   dbName: string;
   collectionName: string;
   collectionOptions: CollectionCreateOptions;
 
-  constructor(client: MongoClient) {
-    super(client);
+  constructor(mongoClient: MongoClient) {
+    super(mongoClient);
 
     this.dbName = config.get('mongo.dbName');
     this.collectionName = config.get('mongo.collections.events.collectionName');
@@ -48,7 +51,7 @@ export class EventModel extends Model {
    */
   public async createCollection(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this._client
+      this._mongoClient
         .db(this.dbName)
         .createCollection(this.collectionName, this.collectionOptions)
         .then((collection) => {
@@ -60,14 +63,13 @@ export class EventModel extends Model {
   }
 
   /**
-   * Returns the collection
+   * @return {Collection<Event>}
    */
-  public get collection(): Collection {
+  public get collection(): Collection<Event> {
     return this._collection;
   }
 
   /**
-   * Find all
    * @return {Promise<Array<Event>>} — A list of events
    */
   public async findAll(): Promise<Array<Event>> {
@@ -77,7 +79,6 @@ export class EventModel extends Model {
   }
 
   /**
-   * Insert one
    * @param {Event} event — A valid event object
    */
   public async insertOne(event: Event): Promise<InsertOneWriteOpResult> {
