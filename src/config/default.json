@@ -1,5 +1,23 @@
 {
   "compression": {},
+  "databases": {
+    "mongoEventsManager": {
+      "host": "",
+      "port": "",
+      "user": "",
+      "password": "",
+      "clientOptions": {
+        "useNewUrlParser": true,
+        "useUnifiedTopology": true
+      },
+      "dbName": "turbulent",
+      "collections": {
+        "events": {
+          "collectionName": "event"
+        }
+      }
+    }
+  },
   "express": {
     "json": {
       "inflate": true,
@@ -13,22 +31,6 @@
       "caseSensitive": false,
       "mergeParams": false,
       "strict": true
-    }
-  },
-  "mongo": {
-    "host": "",
-    "port": "",
-    "user": "",
-    "password": "",
-    "clientOptions": {
-      "useNewUrlParser": true,
-      "useUnifiedTopology": true
-    },
-    "dbName": "turbulent",
-    "collections": {
-      "events": {
-        "collectionName": "event"
-      }
     }
   },
   "services": {

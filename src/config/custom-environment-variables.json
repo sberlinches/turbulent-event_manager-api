@@ -1,9 +1,11 @@
 {
-  "mongo": {
-    "host": "MONGO_HOST",
-    "port": "MONGO_PORT",
-    "user": "MONGO_USER",
-    "password": "MONGO_PASSWORD"
+  "databases": {
+    "mongoEventsManager": {
+      "host": "MONGO_EVENTS_MANAGER_HOST",
+      "port": "MONGO_EVENTS_MANAGER_PORT",
+      "user": "MONGO_EVENTS_MANAGER_USER",
+      "password": "MONGO_EVENTS_MANAGER_PASSWORD"
+    }
   },
   "server": {
     "host": "SERVER_HOST",

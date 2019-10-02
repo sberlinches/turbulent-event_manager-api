@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import {Server} from 'ws';
-import {Mongo} from '../lib/mongo';
+import {EventsManagerDb} from '../databases/eventsManager/eventsManager.db';
 import {Streams} from '../streams/streams';
 import {HttpStatus} from '../lib/http.enum';
 
@@ -17,7 +17,7 @@ export class EventController {
    */
   public static findAll = (req: Request, res: Response, next: NextFunction): void => {
 
-    Mongo.model.event.findAll()
+    EventsManagerDb.events.findAll()
       .then((events) => {
         return res
           .status(HttpStatus.OK)
@@ -34,7 +34,7 @@ export class EventController {
    */
   public static insertOne = (req: Request, res: Response, next: NextFunction): void => {
 
-    Mongo.model.event.insertOne(req.body)
+    EventsManagerDb.events.insertOne(req.body)
       .then((result) => {
         console.log('%o: New event scheduled at %o', new Date(), result.ops[0].scheduledAt);
         return res
